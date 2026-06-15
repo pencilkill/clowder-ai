@@ -32,7 +32,7 @@ export class ActivityTracker {
   private settings = new Map<string, BrakeSettings>();
 
   private static defaultSettings(): BrakeSettings {
-    return { enabled: true, thresholdMinutes: 90 };
+    return { enabled: false, thresholdMinutes: 90 };
   }
 
   getSettings(userId: string): BrakeSettings {
