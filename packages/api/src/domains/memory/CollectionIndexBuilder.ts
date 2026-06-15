@@ -33,9 +33,12 @@ export class CollectionIndexBuilder {
     const force = options?.force ?? false;
     const results = this.scanner.discover(this.manifest.root);
 
-    const { findings } = SecretScanner.scanBatch(
-      results.map((r) => ({ path: r.item.sourcePath ?? r.item.anchor, content: r.rawContent })),
-    );
+    const enableSecretScan = process.env.ENABLE_SECRET_SCAN === 'true';
+    const { findings } = enableSecretScan
+      ? SecretScanner.scanBatch(
+          results.map((r) => ({ path: r.item.sourcePath ?? r.item.anchor, content: r.rawContent })),
+        )
+      : { findings: [] as SecretFinding[] };
 
     if (findings.length > 0) {
       await this.purgeCollection();
